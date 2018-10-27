@@ -1,0 +1,10 @@
+C:\Users\Aster\source\repos\GraphicsLab6\GraphicsLab6\bin\Debug\GraphicsLab6.exe.config
+C:\Users\Aster\source\repos\GraphicsLab6\GraphicsLab6\bin\Debug\GraphicsLab6.exe
+C:\Users\Aster\source\repos\GraphicsLab6\GraphicsLab6\bin\Debug\GraphicsLab6.pdb
+C:\Users\Aster\source\repos\GraphicsLab6\GraphicsLab6\obj\Debug\GraphicsLab6.csprojAssemblyReference.cache
+C:\Users\Aster\source\repos\GraphicsLab6\GraphicsLab6\obj\Debug\GraphicsLab6.Form1.resources
+C:\Users\Aster\source\repos\GraphicsLab6\GraphicsLab6\obj\Debug\GraphicsLab6.Properties.Resources.resources
+C:\Users\Aster\source\repos\GraphicsLab6\GraphicsLab6\obj\Debug\GraphicsLab6.csproj.GenerateResource.cache
+C:\Users\Aster\source\repos\GraphicsLab6\GraphicsLab6\obj\Debug\GraphicsLab6.csproj.CoreCompileInputs.cache
+C:\Users\Aster\source\repos\GraphicsLab6\GraphicsLab6\obj\Debug\GraphicsLab6.exe
+C:\Users\Aster\source\repos\GraphicsLab6\GraphicsLab6\obj\Debug\GraphicsLab6.pdb
