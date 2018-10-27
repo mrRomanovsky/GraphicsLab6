@@ -46,7 +46,6 @@ namespace GraphicsLab6
             CountSegment = ss.Item2 * CountVertex / 2;
             CountEdge = ss.Item2 * CountVertex / ss.Item1;
             Type = type;
-           //CentrePoint = centrePoint;
             SegmentLength = len;
             vertexes = new List<Point3D>();
             if (type.ToString() == "Tetrahedron")
@@ -55,25 +54,14 @@ namespace GraphicsLab6
                 vertexes.Add(new Point3D(len, 0, 0));
                 vertexes.Add(new Point3D(len/2, len * Math.Sqrt(3)/2, 0)); 
                 vertexes.Add(new Point3D(len/2, len * Math.Sqrt(3)/6, len * Math.Sqrt(6)/3));
+                for (int i = 0; i < 4; ++i)
+                    for (int j = 0; j < 4; ++j)
+                        if (i != j)
+                        {
+                            vertexes[i].AddNeighbour(vertexes[j]);
+                            vertexes[j].AddNeighbour(vertexes[i]);
+                        }
             }
-        }
-
-        public List<PointF> DrawPolyhedron(Size size)
-        {
-            var res = new List<PointF>();
-            var x = size.Width / 2 - SegmentLength/2;
-            var y = size.Height / 2 - SegmentLength/2;
-            var z = 1.0;
-            if (Type.ToString() == "Tetrahedron")
-            {
-                foreach (var item in vertexes)
-                {
-                    if (item.Z != 0)
-                        z = item.Z;
-                    res.Add(new PointF((float)(item.X / z + x), (float)(item.Y / z) + y));
-                }
-            }
-            return res;
         }
     }
 }

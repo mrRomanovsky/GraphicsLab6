@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 
 namespace GraphicsLab6
 {
-    class Segment
+    class Segment2D
     {
-        readonly Point a;
-        readonly Point b;
+        readonly PointF a;
+        readonly PointF b;
 
-        public Segment(Point a, Point b)
+        public Segment2D(PointF a, PointF b)
         {
             this.a = a;
             this.b = b;
@@ -20,7 +20,9 @@ namespace GraphicsLab6
 
         public double Lenght()
         {
-            return Math.Sqrt((a.X - b.X) ^ 2 + (a.Y - b.Y) ^ 2);
+            float dx = a.X - b.X;
+            float dy = a.Y - b.Y;
+            return Math.Sqrt(dx * dx + dy * dy);
         }
     }
 

@@ -44,13 +44,31 @@ namespace GraphicsLab6
                 if (figType == "Тетраэдр")
                 {
                     figure = new Polyhedron(PolyhedronType.Tetrahedron, int.Parse(textBox1.Text));
-                    var points = figure.DrawPolyhedron(pictureBox1.Size);
-                    using (var g = Graphics.FromImage(pictureBox1.Image))
+                    DrawPolyhedron(figure, pictureBox1.Size);
+                    pictureBox1.Invalidate();
+                }
+            }
+        }
+
+        private void DrawPolyhedron(Polyhedron polyhedron, Size size)
+        {
+            var res = new List<PointF>();
+            var x = size.Width / 2 - polyhedron.SegmentLength / 2;
+            var y = size.Height / 2 - polyhedron.SegmentLength / 2;
+            var z = 1.0;
+            using (var g = Graphics.FromImage(pictureBox1.Image))
+            {
+                foreach (var item in polyhedron.vertexes)
+                {
+                    if (item.Z != 0)
+                        z = item.Z;
+                    var scaledPoint = new PointF((float)(item.X / z + x), (float)(item.Y / z) + y);
+                    foreach (var neighbour in item.Neighbours)
                     {
-                        g.DrawLines(new Pen(Color.Red), points.ToArray());
+                        var scaledNeighbour = new PointF((float)(neighbour.X / z + x), (float)(neighbour.Y / z) + y);
+                        g.DrawLine(redPen, scaledPoint, scaledNeighbour);
                     }
-                    polyhrdron2D = new Edge(points);
-                    pictureBox1.Refresh();
+                    res.Add(new PointF((float)(item.X / z + x), (float)(item.Y / z) + y));
                 }
             }
         }
