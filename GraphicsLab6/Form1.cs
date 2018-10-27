@@ -39,14 +39,22 @@ namespace GraphicsLab6
 
         private void button1_Click(object sender, EventArgs e)
         {
-            if(figType != "" && textBox1.Text != "" && mode == "")
+            if (figType != "" && textBox1.Text != "" && mode == "")
             {
-                if (figType == "Тетраэдр")
+                switch (figType)
                 {
-                    figure = new Polyhedron(PolyhedronType.Tetrahedron, int.Parse(textBox1.Text));
-                    DrawPolyhedron(figure, pictureBox1.Size);
-                    pictureBox1.Invalidate();
+                    case "Тетраэдр":
+                        figure = new Polyhedron(PolyhedronType.Tetrahedron, int.Parse(textBox1.Text));
+                        break;
+                    case "Гексаэдр":
+                        figure = new Polyhedron(PolyhedronType.Hexahedron, int.Parse(textBox1.Text));
+                        break;
+                    case "Октаэдр":
+                        figure = new Polyhedron(PolyhedronType.Octahedron, int.Parse(textBox1.Text));
+                        break;
                 }
+                DrawPolyhedron(figure, pictureBox1.Size);
+                pictureBox1.Invalidate();
             }
         }
 
