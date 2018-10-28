@@ -38,6 +38,7 @@ namespace GraphicsLab6
         public PointF CentrePoint;
         public int SegmentLength;
         public List<Point3D> vertexes;
+        public Point3D Centre { get; private set; }
 
         public Polyhedron(PolyhedronType type, int len)
         {
@@ -62,6 +63,63 @@ namespace GraphicsLab6
             }
         }
 
+        //angle - в радианах!
+        public void RotateAroundLine(Point3D linePoint, Point3D parallelVector, double angle)
+        {
+            var l = parallelVector.X;
+            var m = parallelVector.Y;
+            var n = parallelVector.Z;
+            var lSquared = l * l;
+            var mSquared = m * m;
+            var nSquared = n * n;
+            var cosAngle = Math.Cos(angle);
+            var sinAngle = Math.Sin(angle);
+
+            //fixing sine and cosine
+            #region fixdoubles
+            if (Math.Abs(cosAngle - 1) < 0.00001)
+                cosAngle = 1;
+            if (Math.Abs(cosAngle) < 0.00001)
+                cosAngle = 0;
+            if (Math.Abs(sinAngle - 1) < 0.00001)
+                sinAngle = 1;
+            if (Math.Abs(sinAngle) < 0.00001)
+                sinAngle = 0;
+            #endregion
+
+            var rotateMatrix = new List<List<double>>
+            {
+                new List<double>{lSquared + cosAngle * (1 - lSquared), l*(1 - cosAngle)*m + n*sinAngle, l*(1 - cosAngle)*n - m*sinAngle, 0},
+                new List<double>{ l * (1 - cosAngle) * m - n * sinAngle, mSquared + cosAngle*(1 - mSquared), m*(1 - cosAngle)*n + l*sinAngle, 0},
+                new List<double>{ l * (1 - cosAngle) * n + m * sinAngle, m*(1 - cosAngle)*n - l*sinAngle, nSquared + cosAngle*(1 - nSquared), 0},
+                new List<double>{ 0, 0, 0, 1}
+            };
+
+            var shiftTo0Matrix = new List<List<double>>
+            {
+                new List<double>{1, 0, 0, 0 },
+                new List<double>{0, 1, 0, 0},
+                new List<double>{0, 0, 1, 0 },
+                new List<double>{-linePoint.X, -linePoint.Y, -linePoint.Z, 1 }
+            };
+
+            var shiftBackMatrix = new List<List<double>>
+            {
+                new List<double>{1, 0, 0, 0 },
+                new List<double>{0, 1, 0, 0},
+                new List<double>{0, 0, 1, 0 },
+                new List<double>{linePoint.X, linePoint.Y, linePoint.Z, 1 }
+            };
+
+            foreach (var vertex in vertexes)
+            {
+                vertex.MultiplyByMatrix(shiftTo0Matrix);
+                vertex.MultiplyByMatrix(rotateMatrix);
+                vertex.MultiplyByMatrix(shiftBackMatrix);
+            }
+        }
+
+
         #region tetrahedron
         private void BuildTetrahedron(int len)
         {
@@ -76,6 +134,12 @@ namespace GraphicsLab6
                         vertexes[i].AddNeighbour(vertexes[j]);
                         vertexes[j].AddNeighbour(vertexes[i]);
                     }
+            Centre = new Point3D
+                (
+                (vertexes[0].X + vertexes[1].X + vertexes[2].X + vertexes[3].X) / 4,
+                (vertexes[0].Y + vertexes[1].Y + vertexes[2].Y + vertexes[3].Y) / 4,
+                (vertexes[0].Z + vertexes[1].Z + vertexes[2].Z + vertexes[3].Z) / 4
+                );
         }
         #endregion
 
@@ -114,6 +178,8 @@ namespace GraphicsLab6
                 vertexes[i].AddNeighbour(vertexes[i + 4]);
                 vertexes[i + 4].AddNeighbour(vertexes[i]);
             }
+
+            Centre = new Point3D(len / 2, len / 2, len / 2);
         }
         #endregion
 
@@ -133,6 +199,7 @@ namespace GraphicsLab6
                         || vertex1.Y == 0 && vertex2.Y != 0
                         || vertex1.Z == 0 && vertex2.Z != 0  )
                         vertex1.AddNeighbour(vertex2);
+            Centre = new Point3D(0, 0, 0);
         }
         #endregion
     }

@@ -60,6 +60,7 @@ namespace GraphicsLab6
 
         private void DrawPolyhedron(Polyhedron polyhedron, Size size)
         {
+            pictureBox1.Image = new Bitmap(pictureBox1.Width, pictureBox1.Height);
             var res = new List<PointF>();
             var x = size.Width / 2 - polyhedron.SegmentLength / 2;
             var y = size.Height / 2 - polyhedron.SegmentLength / 2;
@@ -73,7 +74,7 @@ namespace GraphicsLab6
                     var scaledPoint = new PointF((float)(item.X / z + x), (float)(item.Y / z) + y);
                     foreach (var neighbour in item.Neighbours)
                     {
-                        var scaledNeighbour = new PointF((float)(neighbour.X / z + x), (float)(neighbour.Y / z) + y);
+                        var scaledNeighbour = new PointF((float)((float)neighbour.X / (float)z + x), (float)((float)neighbour.Y / (float)z) + y);
                         g.DrawLine(redPen, scaledPoint, scaledNeighbour);
                     }
                     res.Add(new PointF((float)(item.X / z + x), (float)(item.Y / z) + y));
@@ -96,7 +97,58 @@ namespace GraphicsLab6
 
         private void listBox2_SelectedIndexChanged(object sender, EventArgs e)
         {
+            switch (listBox2.Text)
+            {
+                case "Задание 1":
+                    mode = "";
+                    break;
+                case "Задание 5":
+                    using (var centreLineDialog = new LineThroughCenter())
+                    {
+                        var dialogRes = centreLineDialog.ShowDialog();
+                        if (dialogRes == DialogResult.OK)
+                        {
+                            var axes = centreLineDialog.AxisChosen;
+                            Point3D parallelUnitVector;
+                            switch (axes)
+                            {
+                                case "x":
+                                    parallelUnitVector = new Point3D(1, 0, 0);
+                                    break;
+                                case "y":
+                                    parallelUnitVector = new Point3D(0, 1, 0);
+                                    break;
+                                default:
+                                    parallelUnitVector = new Point3D(0, 0, 1);
+                                    break;
+                            }
+                            figure.RotateAroundLine(figure.Centre, parallelUnitVector, centreLineDialog.RotationAngleRadians);
+                            DrawPolyhedron(figure, pictureBox1.Size);
+                            pictureBox1.Invalidate();
+                        }
+                    }
+                    break;
+                case "Задание 6":
+                    using (var lineRotateDialog = new LineToRotate())
+                    {
+                        var dialogRes = lineRotateDialog.ShowDialog();
+                        if (dialogRes == DialogResult.OK)
+                        {
+                            var point1 = lineRotateDialog.Point1;
+                            var point2 = lineRotateDialog.Point2;
+                            var parallelVector = new Point3D(point2.X - point1.X, point2.Y - point1.Y, point2.Z - point1.Z);
+                            var vectorLength = Math.Sqrt(parallelVector.X * parallelVector.X + parallelVector.Y * parallelVector.Y + parallelVector.Z * parallelVector.Z);
+                            parallelVector.X /= vectorLength;
+                            parallelVector.Y /= vectorLength;
+                            parallelVector.Z /= vectorLength;
+                            figure.RotateAroundLine(point2, parallelVector, lineRotateDialog.AngleRad);
+                            DrawPolyhedron(figure, pictureBox1.Size);
+                            pictureBox1.Invalidate();
+                        }
+                    }
+                    break;
 
+            }
         }
 
         #region task2

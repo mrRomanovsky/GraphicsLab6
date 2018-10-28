@@ -54,12 +54,30 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="LineThroughCenter.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="LineThroughCenter.Designer.cs">
+      <DependentUpon>LineThroughCenter.cs</DependentUpon>
+    </Compile>
+    <Compile Include="LineToRotate.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="LineToRotate.Designer.cs">
+      <DependentUpon>LineToRotate.cs</DependentUpon>
+    </Compile>
     <Compile Include="Polyhedron.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Segment.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="LineThroughCenter.resx">
+      <DependentUpon>LineThroughCenter.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="LineToRotate.resx">
+      <DependentUpon>LineToRotate.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
