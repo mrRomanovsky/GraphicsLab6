@@ -65,6 +65,7 @@ namespace GraphicsLab6
             var x = size.Width / 2 - polyhedron.SegmentLength / 2;
             var y = size.Height / 2 - polyhedron.SegmentLength / 2;
             var z = 1.0;
+
             using (var g = Graphics.FromImage(pictureBox1.Image))
             {
                 foreach (var item in polyhedron.vertexes)
@@ -82,6 +83,55 @@ namespace GraphicsLab6
             }
         }
 
+        private void DrawPolyhedronYOZ(Polyhedron polyhedron, Size size)
+        {
+            pictureBox1.Image = new Bitmap(pictureBox1.Width, pictureBox1.Height);
+            var res = new List<PointF>();
+            var y = size.Width / 2 - polyhedron.SegmentLength / 2;
+            var z = size.Height / 2 - polyhedron.SegmentLength / 2;
+            var x = 1.0;
+
+            using (var g = Graphics.FromImage(pictureBox1.Image))
+            {
+                foreach (var item in polyhedron.vertexes)
+                {
+                    if (item.X != 0)
+                        x = item.X;
+                    var scaledPoint = new PointF((float)(item.Y / x + y), (float)(item.Z / x) + z);
+                    foreach (var neighbour in item.Neighbours)
+                    {
+                        var scaledNeighbour = new PointF((float)((float)neighbour.Y / (float)x + y), (float)((float)neighbour.Z / (float)x) + z);
+                        g.DrawLine(redPen, scaledPoint, scaledNeighbour);
+                    }
+                    res.Add(new PointF((float)(item.Y / x + y), (float)(item.Z / x) + z));
+                }
+            }
+        }
+
+        private void DrawPolyhedronXOZ(Polyhedron polyhedron, Size size)
+        {
+            pictureBox1.Image = new Bitmap(pictureBox1.Width, pictureBox1.Height);
+            var res = new List<PointF>();
+            var x = size.Width / 2 - polyhedron.SegmentLength / 2;
+            var z = size.Height / 2 - polyhedron.SegmentLength / 2;
+            var y = 1.0;
+
+            using (var g = Graphics.FromImage(pictureBox1.Image))
+            {
+                foreach (var item in polyhedron.vertexes)
+                {
+                    if (item.Y != 0)
+                        y = item.Y;
+                    var scaledPoint = new PointF((float)(item.X / y + x), (float)(item.Z / y) + z);
+                    foreach (var neighbour in item.Neighbours)
+                    {
+                        var scaledNeighbour = new PointF((float)((float)neighbour.X / (float)y + x), (float)((float)neighbour.Z / (float)y) + z);
+                        g.DrawLine(redPen, scaledPoint, scaledNeighbour);
+                    }
+                    res.Add(new PointF((float)(item.X / y + x), (float)(item.Z / y) + z));
+                }
+            }
+        }
         private void button2_Click(object sender, EventArgs e)
         {
             pictureBox1.Image = new Bitmap(pictureBox1.Width, pictureBox1.Height);
@@ -101,6 +151,47 @@ namespace GraphicsLab6
             {
                 case "Задание 1":
                     mode = "";
+                    break;
+                case "Задание 7":
+                    var c = pictureBox1.Height / 2;
+                    var perspective = new List<List<double>> { new List<double> { 1, 0, 0, 0 }, new List<double> { 0, 1, 0, 0 }, new List<double> { 0, 0, 0, -1 / c }, new List<double> { 0, 0, 0, 1 } };
+
+                    foreach (var item in figure.vertexes)
+                        item.MultiplyByMatrix(perspective);
+                    DrawPolyhedron(figure, pictureBox1.Size);
+                    pictureBox1.Invalidate();
+                    break;
+                case "Задание 8":
+                    var isometric = new List<List<double>> { new List<double> { Math.Sqrt(0.5), -1 / Math.Sqrt(6), 0, 0 }, new List<double> { 0, Math.Sqrt(2) / Math.Sqrt(3), 0, 0 }, new List<double> { -1 / Math.Sqrt(2), -1 / Math.Sqrt(6), 0, 0 }, new List<double> { 0, 0, 0, 1 } };
+
+                    foreach (var item in figure.vertexes)
+                        item.MultiplyByMatrix(isometric);
+                    DrawPolyhedron(figure, pictureBox1.Size);
+                    pictureBox1.Invalidate();
+                    break;
+                case "Задание 9 XOY":
+                    var ortXOY = new List<List<double>> { new List<double> { 1, 0, 0, 0 }, new List<double> { 0, 1, 0, 0 }, new List<double> { 0, 0, 0, 0}, new List<double> { 0, 0, 0, 1 } };
+
+                    foreach (var item in figure.vertexes)
+                        item.MultiplyByMatrix(ortXOY);
+                    DrawPolyhedron(figure, pictureBox1.Size);
+                    pictureBox1.Invalidate();
+                    break;
+                case "Задание 9 XOZ":
+                    var ortXOZ = new List<List<double>> { new List<double> { 1, 0, 0, 0 }, new List<double> { 0, 0, 0, 0 }, new List<double> { 0, 0, 1, 0 }, new List<double> { 0, 0, 0, 1 } };
+
+                    foreach (var item in figure.vertexes)
+                        item.MultiplyByMatrix(ortXOZ);
+                    DrawPolyhedronXOZ(figure, pictureBox1.Size);
+                    pictureBox1.Invalidate();
+                    break;
+                case "Задание 9 YOZ":
+                    var ortYOZ = new List<List<double>> { new List<double> { 0, 0, 0, 0 }, new List<double> { 0, 1, 0, 0 }, new List<double> { 0, 0, 1, 0 }, new List<double> { 0, 0, 0, 1 } };
+
+                    foreach (var item in figure.vertexes)
+                        item.MultiplyByMatrix(ortYOZ);
+                    DrawPolyhedronYOZ(figure, pictureBox1.Size);
+                    pictureBox1.Invalidate();
                     break;
                 case "Задание 5":
                     using (var centreLineDialog = new LineThroughCenter())

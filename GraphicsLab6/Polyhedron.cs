@@ -72,11 +72,11 @@ namespace GraphicsLab6
             var lSquared = l * l;
             var mSquared = m * m;
             var nSquared = n * n;
-            var cosAngle = Math.Cos(angle);
-            var sinAngle = Math.Sin(angle);
+            var cosAngle = Math.Round(Math.Cos(angle), 3);
+            var sinAngle = Math.Round(Math.Sin(angle), 3);
 
             //fixing sine and cosine
-            #region fixdoubles
+            /*#region fixdoubles
             if (Math.Abs(cosAngle - 1) < 0.00001)
                 cosAngle = 1;
             if (Math.Abs(cosAngle) < 0.00001)
@@ -85,7 +85,7 @@ namespace GraphicsLab6
                 sinAngle = 1;
             if (Math.Abs(sinAngle) < 0.00001)
                 sinAngle = 0;
-            #endregion
+            #endregion*/
 
             var rotateMatrix = new List<List<double>>
             {
@@ -116,6 +116,9 @@ namespace GraphicsLab6
                 vertex.MultiplyByMatrix(shiftTo0Matrix);
                 vertex.MultiplyByMatrix(rotateMatrix);
                 vertex.MultiplyByMatrix(shiftBackMatrix);
+                vertex.X = Math.Round(vertex.X, 3);
+                vertex.Y = Math.Round(vertex.Y, 3);
+                vertex.Z = Math.Round(vertex.Z, 3);
             }
         }
 

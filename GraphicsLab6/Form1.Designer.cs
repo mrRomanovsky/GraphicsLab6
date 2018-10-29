@@ -81,10 +81,13 @@
             "Задание 5",
             "Задание 6",
             "Задание 7",
-            "Задание 8"});
+            "Задание 8",
+            "Задание 9 XOY",
+            "Задание 9 YOZ",
+            "Задание 9 XOZ"});
             this.listBox2.Location = new System.Drawing.Point(622, 111);
             this.listBox2.Name = "listBox2";
-            this.listBox2.Size = new System.Drawing.Size(120, 95);
+            this.listBox2.Size = new System.Drawing.Size(120, 134);
             this.listBox2.TabIndex = 3;
             this.listBox2.SelectedIndexChanged += new System.EventHandler(this.listBox2_SelectedIndexChanged);
             // 

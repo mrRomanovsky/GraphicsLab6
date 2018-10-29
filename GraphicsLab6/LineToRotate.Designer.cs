@@ -131,7 +131,7 @@
             // x1TextBox
             // 
             this.x1TextBox.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
-            this.x1TextBox.ForeColor = System.Drawing.SystemColors.Window;
+            this.x1TextBox.ForeColor = System.Drawing.SystemColors.MenuText;
             this.x1TextBox.Location = new System.Drawing.Point(128, 67);
             this.x1TextBox.Name = "x1TextBox";
             this.x1TextBox.Size = new System.Drawing.Size(100, 20);
