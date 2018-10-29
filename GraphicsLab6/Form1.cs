@@ -65,6 +65,7 @@ namespace GraphicsLab6
             var x = size.Width / 2 - polyhedron.SegmentLength / 2;
             var y = size.Height / 2 - polyhedron.SegmentLength / 2;
             var z = 1.0;
+
             using (var g = Graphics.FromImage(pictureBox1.Image))
             {
                 foreach (var item in polyhedron.vertexes)
@@ -101,6 +102,26 @@ namespace GraphicsLab6
             {
                 case "Задание 1":
                     mode = "";
+                    break;
+                case "Задание 7":
+                    var c = pictureBox1.Height / 2;
+                    var perspective = new List<List<double>> { new List<double> { 1, 0, 0, 0 }, new List<double> { 0, 1, 0, 0 }, new List<double> { 0, 0, 0, -1 / c }, new List<double> { 0, 0, 0, 1 } };
+
+                    foreach (var item in figure.vertexes)
+                        item.MultiplyByMatrix(perspective);
+                    DrawPolyhedron(figure, pictureBox1.Size);
+                    pictureBox1.Invalidate();
+                    break;
+                case "Задание 8":
+                    //double[,] perspective = new double[,] { { 1, 0, 0, 0 }, { 0, 1, 0, 0 }, { 0, 0, 1, 0 }, { 0, 0, 0, 1 } };
+                    //Изометрическая
+                    var pers = new List<List<double>> { new List<double> { Math.Sqrt(0.5), -1 / Math.Sqrt(6), 0, 0 }, new List<double> { 0, Math.Sqrt(2) / Math.Sqrt(3), 0, 0 }, new List<double> { -1 / Math.Sqrt(2), -1 / Math.Sqrt(6), 0, 0 }, new List<double> { 0, 0, 0, 1 } };
+                    //double[,] perspective = new double[,] { { 1, 0, 0, 0 }, { 0, 1, 0, 0 }, { 0, 0, 0, -1 / c }, { 0, 0, 0, 1 } };
+
+                    foreach (var item in figure.vertexes)
+                        item.MultiplyByMatrix(pers);
+                    DrawPolyhedron(figure, pictureBox1.Size);
+                    pictureBox1.Invalidate();
                     break;
                 case "Задание 5":
                     using (var centreLineDialog = new LineThroughCenter())
