@@ -29,8 +29,8 @@ namespace GraphicsLab6
         private void InitializeTasksPanels()
         {
             Initialize2TaskPanel();
-           // Initialize4TaskPanel();
-            //I7nitialize5TaskPanel();
+            Initialize3TaskPanel();
+            Initialize4TaskPanel();
         }
         private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -39,7 +39,8 @@ namespace GraphicsLab6
 
         private void button1_Click(object sender, EventArgs e)
         {
-            if (figType != "" && textBox1.Text != "" && mode == "")
+            pictureBox1.Image = new Bitmap(pictureBox1.Width, pictureBox1.Height);
+            if (figType != "" && textBox1.Text != "")//&& mode == "")
             {
                 switch (figType)
                 {
@@ -147,10 +148,30 @@ namespace GraphicsLab6
 
         private void listBox2_SelectedIndexChanged(object sender, EventArgs e)
         {
+            foreach (var item in tasksPanels)
+            {
+                item.Enabled = false;
+                item.Visible = false;
+            }
             switch (listBox2.Text)
             {
                 case "Задание 1":
                     mode = "";
+                    break;
+                case "Задание 2":
+                    mode = "move";
+                    tasksPanels[((ListBox)sender).SelectedIndex].Enabled = true;
+                    tasksPanels[((ListBox)sender).SelectedIndex].Visible = true;
+                    break;
+                case "Задание 3":
+                    mode = "reflection";
+                    tasksPanels[((ListBox)sender).SelectedIndex].Enabled = true;
+                    tasksPanels[((ListBox)sender).SelectedIndex].Visible = true;
+                    break;
+                case "Задание 4":
+                    mode = "centrescale";
+                    tasksPanels[((ListBox)sender).SelectedIndex].Enabled = true;
+                    tasksPanels[((ListBox)sender).SelectedIndex].Visible = true;
                     break;
                 case "Задание 7":
                     var c = pictureBox1.Height / 2;
@@ -242,15 +263,52 @@ namespace GraphicsLab6
             }
         }
 
-        #region task2
+        #region task234
         private List<string> activeItems = new List<string>();
+
+        private int[,] MultMatrix(int[,] a, int[,] b)
+        {
+            if (a.GetLength(1) != b.GetLength(0)) throw new Exception("Матрицы нельзя перемножить");
+            int[,] r = new int[a.GetLength(0), b.GetLength(1)];
+            for (int i = 0; i < a.GetLength(0); i++)
+            {
+                for (int j = 0; j < b.GetLength(1); j++)
+                {
+                    for (int k = 0; k < b.GetLength(0); k++)
+                    {
+                        r[i, j] += a[i, k] * b[k, j];
+                    }
+                }
+            }
+            return r;
+        }
+
+        private double[,] MultMatrix(double[,] a, double[,] b)
+        {
+            if (a.GetLength(1) != b.GetLength(0)) throw new Exception("Матрицы нельзя перемножить");
+            double[,] r = new double[a.GetLength(0), b.GetLength(1)];
+            for (int i = 0; i < a.GetLength(0); i++)
+            {
+                for (int j = 0; j < b.GetLength(1); j++)
+                {
+                    for (int k = 0; k < b.GetLength(0); k++)
+                    {
+                        r[i, j] += a[i, k] * b[k, j];
+                    }
+                }
+            }
+            return r;
+        }
+
+        private bool CheckCorrectPoint(double w, double h) =>
+             w > 0 && w < pictureBox1.Width && 0 < h && h < pictureBox1.Height;
 
         private void Initialize2TaskPanel()
         {
             var task2Panel = new Panel();
             task2Panel.Visible = false;
             task2Panel.Enabled = false;
-            task2Panel.Location = new Point(600, 220);
+            task2Panel.Location = new Point(600, 250);
             task2Panel.Size = new Size(190, 180);
             this.Controls.Add(task2Panel);
             tasksPanels.Add(task2Panel);
@@ -293,7 +351,7 @@ namespace GraphicsLab6
             var task2XLabel = new Label();
             task2XLabel.Text = "X: ";
             task2XLabel.Name = "task2XLabel";
-            task2XLabel.Location = new Point(30, 110);
+            task2XLabel.Location = new Point(10, 110);
             task2XLabel.Size = new Size(20, 20);
             task2XLabel.Enabled = false;
             task2XLabel.Visible = false;
@@ -301,7 +359,7 @@ namespace GraphicsLab6
             var task2XTextBox = new TextBox();
             task2XTextBox.Text = "0";
             task2XTextBox.Name = "task2XTextBox";
-            task2XTextBox.Location = new Point(60, 110);
+            task2XTextBox.Location = new Point(32, 110);
             task2XTextBox.Size = new Size(30, 20);
             task2XTextBox.Enabled = false;
             task2XTextBox.Visible = false;
@@ -310,7 +368,7 @@ namespace GraphicsLab6
             var task2YLabel = new Label();
             task2YLabel.Text = "Y: ";
             task2YLabel.Name = "task2YLabel";
-            task2YLabel.Location = new Point(100, 110);
+            task2YLabel.Location = new Point(72, 110);
             task2YLabel.Size = new Size(20, 20);
             task2YLabel.Enabled = false;
             task2YLabel.Visible = false;
@@ -318,11 +376,29 @@ namespace GraphicsLab6
             var task2YTextBox = new TextBox();
             task2YTextBox.Text = "0";
             task2YTextBox.Name = "task2YTextBox";
-            task2YTextBox.Location = new Point(130, 110);
+            task2YTextBox.Location = new Point(94, 110);
             task2YTextBox.Size = new Size(30, 20);
             task2YTextBox.Enabled = false;
             task2YTextBox.Visible = false;
             task2Panel.Controls.Add(task2YTextBox);
+
+            var task2ZLabel = new Label();
+            task2ZLabel.Text = "Z: ";
+            task2ZLabel.Name = "task2ZLabel";
+            task2ZLabel.Location = new Point(137, 110);
+            task2ZLabel.Size = new Size(20, 20);
+            task2ZLabel.Enabled = false;
+            task2ZLabel.Visible = false;
+            task2Panel.Controls.Add(task2ZLabel);
+            var task2ZTextBox = new TextBox();
+            task2ZTextBox.Text = "0";
+            task2ZTextBox.Name = "task2ZTextBox";
+            task2ZTextBox.Location = new Point(159, 110);
+            task2ZTextBox.Size = new Size(30, 20);
+            task2ZTextBox.Enabled = false;
+            task2ZTextBox.Visible = false;
+            task2Panel.Controls.Add(task2ZTextBox);
+
 
             var task2AngleLabel = new Label();
             task2AngleLabel.Text = "Угол: ";
@@ -345,15 +421,193 @@ namespace GraphicsLab6
             task2ButtonOk.Text = "Сместить";
             task2ButtonOk.Location = new Point(60, 150);
             task2ButtonOk.Name = "task2ButtonOk";
-           // task2ButtonOk.Click += task2ButtonOk_Click;
+            task2ButtonOk.Click += task2ButtonOk_Click;
             task2ButtonOk.Size = new Size(80, 23);
             task2ButtonOk.Enabled = false;
             task2ButtonOk.Visible = false; task2ButtonOk.FlatStyle = FlatStyle.Flat;
             task2Panel.Controls.Add(task2ButtonOk);
         }
 
+        private void Initialize3TaskPanel()
+        {
+            var task3Panel = new Panel();
+            task3Panel.Visible = false;
+            task3Panel.Enabled = false;
+            task3Panel.Location = new Point(600, 250);
+            task3Panel.Size = new Size(190, 180);
+            this.Controls.Add(task3Panel);
+            tasksPanels.Add(task3Panel);
+            var task3LabelAbout = new Label();
+            task3LabelAbout.Location = new Point(22, 2);
+            task3LabelAbout.Size = new Size(180, 50);
+            task3LabelAbout.Text
+                = "Отражение относительно выбранной координатной плоскости";
+            task3Panel.Controls.Add(task3LabelAbout);
+            var task3LabelDirection = new Label();
+            task3LabelDirection.Text = "Введите координатную плоскость: ";
+            task3LabelDirection.Name = "task3LabelDirection";
+            task3LabelDirection.Location = new Point(22, 80);
+            task3LabelDirection.Size = new Size(160, 30);
+            task3Panel.Controls.Add(task3LabelDirection);
+
+            var task3RefLabel = new Label();
+            task3RefLabel.Text = "Значение: ";
+            task3RefLabel.Name = "task3ScaleLabel";
+            task3RefLabel.Location = new Point(50, 110);
+            task3RefLabel.Size = new Size(40, 20);
+            task3Panel.Controls.Add(task3RefLabel);
+            var task3RefTextBox = new TextBox();
+            task3RefTextBox.Text = "xOy";
+            task3RefTextBox.Name = "task3RefTextBox";
+            task3RefTextBox.Location = new Point(95, 110);
+            task3RefTextBox.Size = new Size(30, 20);
+            task3Panel.Controls.Add(task3RefTextBox);
+
+            var task3ButtonOk = new Button();
+            task3ButtonOk.Text = "Отразить";
+            task3ButtonOk.Location = new Point(60, 150);
+            task3ButtonOk.Name = "task3ButtonOk";
+            task3ButtonOk.Click += reflectionButton_Click;
+            task3ButtonOk.Size = new Size(80, 23);
+            task3ButtonOk.FlatStyle = FlatStyle.Flat;
+            task3Panel.Controls.Add(task3ButtonOk);
+        }
+
+        private void Initialize4TaskPanel()
+        {
+            var task4Panel = new Panel();
+            task4Panel.Visible = false;
+            task4Panel.Enabled = false;
+            task4Panel.Location = new Point(600, 250);
+            task4Panel.Size = new Size(190, 180);
+            this.Controls.Add(task4Panel);
+            tasksPanels.Add(task4Panel);
+            var task4LabelAbout = new Label();
+            task4LabelAbout.Location = new Point(22, 2);
+            task4LabelAbout.Size = new Size(180, 50);
+            task4LabelAbout.Text
+                = "Масштабирование многогранника относительно своего центра.";
+            task4Panel.Controls.Add(task4LabelAbout);
+            var task4LabelDirection = new Label();
+            task4LabelDirection.Text = "Задайте масштаб: ";
+            task4LabelDirection.Name = "task4LabelDirection";
+            task4LabelDirection.Location = new Point(22, 80);
+            task4LabelDirection.Size = new Size(160, 30);
+            task4Panel.Controls.Add(task4LabelDirection);
+
+            var task4ScaleLabel = new Label();
+            task4ScaleLabel.Text = "Значение: ";
+            task4ScaleLabel.Name = "task4ScaleLabel";
+            task4ScaleLabel.Location = new Point(50, 110);
+            task4ScaleLabel.Size = new Size(40, 20);
+            task4Panel.Controls.Add(task4ScaleLabel);
+            var task4ScaleTextBox = new TextBox();
+            task4ScaleTextBox.Text = "0";
+            task4ScaleTextBox.Name = "task4ScaleTextBox";
+            task4ScaleTextBox.Location = new Point(95, 110);
+            task4ScaleTextBox.Size = new Size(30, 20);
+            task4Panel.Controls.Add(task4ScaleTextBox);
+
+            var task4ButtonOk = new Button();
+            task4ButtonOk.Text = "Масштабировать";
+            task4ButtonOk.Location = new Point(60, 150);
+            task4ButtonOk.Name = "task4ButtonOk";
+            task4ButtonOk.Click += centreScaleButton_Click;
+            task4ButtonOk.Size = new Size(80, 23);
+            task4ButtonOk.FlatStyle = FlatStyle.Flat;
+            task4Panel.Controls.Add(task4ButtonOk);
+        }
+
+        private void reflectionButton_Click(object sender, EventArgs e)
+        {
+            var t1 = tasksPanels[1].Controls.Find("task3RefTextBox", false).First().Text.ToLower();
+            var matrix = new double[4, 4];
+            if (t1 == "yox" || t1 == "xoy")
+                matrix = new double[,] {
+                    { 1, 0, 0, 0 },
+                    { 0, 1, 0, 0 },
+                    { 0, 0, -1, 0 },
+                    { 0, 0, 0, 1 } };
+            else if (t1 == "yoz" || t1 == "zoy")
+                matrix = new double[,] {
+                    { -1, 0, 0, 0 },
+                    { 0, 1, 0, 0 },
+                    { 0, 0, 1, 0 },
+                    { 0, 0, 0 , 1 } };
+            else if (t1 == "zox" || t1 == "xoz")
+                matrix = new double[,] {
+                    { 1, 0, 0, 0 },
+                    { 0, -1, 0, 0 },
+                    { 0, 0, 1, 0 },
+                    { 0, 0, 0, 1 } };
+            else
+                return;
+            var matrix2 = new double[figure.CountVertex, 4];
+            for (int i = 0; i < figure.CountVertex; ++i)
+            {
+                matrix2[i, 0] = figure.vertexes[i].X;
+                matrix2[i, 1] = figure.vertexes[i].Y;
+                matrix2[i, 2] = figure.vertexes[i].Z;
+                matrix2[i, 3] = 1;
+            }
+            var res2 = MultMatrix(matrix2, matrix);
+            for (int i = 0; i < figure.CountVertex; ++i)
+            {
+                figure.vertexes[i].X = Math.Round(res2[i, 0], 3);
+                figure.vertexes[i].Y = Math.Round(res2[i, 1], 3);
+                figure.vertexes[i].Z = Math.Round(res2[i, 2], 3);
+            }
+            pictureBox1.Image = new Bitmap(pictureBox1.Width, pictureBox1.Height);
+            DrawPolyhedron(figure, pictureBox1.Size);
+            pictureBox1.Invalidate();
+        }
+
+        private void centreScaleButton_Click(object sender, EventArgs e)
+        {
+            var t1 = double.Parse(tasksPanels[2].Controls.Find("task4ScaleTextBox", false).First().Text);
+            if (t1 == 0)
+                return;
+            var matrix = new double[,] {
+                    { t1, 0, 0, 0 },
+                    { 0, t1, 0, 0 },
+                    { 0, 0, t1, 0 },
+                    //{ 0, 0, 0, 1 } };
+
+                  //{figure.Centre.X * t1, figure.Centre.Y * t1, t1, 1 } };
+                    { figure.Centre.X - figure.Centre.X * t1, figure.Centre.Y - figure.Centre.Y * t1, figure.Centre.Z - figure.Centre.Z * t1, 1 } };
+            var matrix2 = new double[figure.CountVertex, 4];
+            for (int i = 0; i < figure.CountVertex; ++i)
+            {
+                matrix2[i, 0] = figure.vertexes[i].X;
+                matrix2[i, 1] = figure.vertexes[i].Y;
+                matrix2[i, 2] = figure.vertexes[i].Z;
+                matrix2[i, 3] = 1;
+            }
+            var res2 = MultMatrix(matrix2, matrix);
+            for (int i = 0; i < figure.CountVertex; ++i)
+            {
+                figure.vertexes[i].X = Math.Round(res2[i, 0], 3);
+                figure.vertexes[i].Y = Math.Round(res2[i, 1], 3);
+                figure.vertexes[i].Z = Math.Round(res2[i, 2], 3);
+            }
+            pictureBox1.Image = new Bitmap(pictureBox1.Width, pictureBox1.Height);
+            DrawPolyhedron(figure, pictureBox1.Size);
+            pictureBox1.Invalidate();
+        }
+
+        private void task2ButtonOk_Click(object sender, EventArgs e)
+        {
+            if (mode == "move")
+                MoveFigure();
+            else if (mode == "turn")
+                TurnFigure();
+            else if (mode == "scale")
+                ScaleFigure();
+        }
+
+
         private void moveButton_Click(object sender, EventArgs e)
-        { 
+        {
             mode = "move";
             foreach (var ai in activeItems)
             {
@@ -361,7 +615,7 @@ namespace GraphicsLab6
                 item.Visible = false;
                 item.Enabled = false;
             }
-            var strs = new List<string> { "task2LabelDirection", "task2XLabel", "task2YLabel", "task2XTextBox", "task2YTextBox", "task2ButtonOk" };
+            var strs = new List<string> { "task2LabelDirection", "task2XLabel", "task2YLabel", "task2ZLabel", "task2XTextBox", "task2YTextBox", "task2ZTextBox", "task2ButtonOk" };
             foreach (var s in strs)
             {
                 var item = tasksPanels[0].Controls.Find(s, false).First();
@@ -376,7 +630,7 @@ namespace GraphicsLab6
         }
 
         private void turnButton_Click(object sender, EventArgs e)
-        { 
+        {
             mode = "turn";
             foreach (var ai in activeItems)
             {
@@ -399,7 +653,7 @@ namespace GraphicsLab6
         }
 
         private void scaleButton_Click(object sender, EventArgs e)
-        { 
+        {
             mode = "scale";
             foreach (var ai in activeItems)
             {
@@ -423,162 +677,88 @@ namespace GraphicsLab6
             activeItems = strs;
         }
 
-        //private void ScaleFigure()
-        //{
-        //    var t1 = double.Parse(tasksPanels[0].Controls.Find("task2AngleTextBox", false).First().Text);
-        //    if (t1 == 0)
-        //        return;
-        //    var matrix = new double[,] { { 1, 0, 0 }, { 0, 1, 0 }, { 0, 0, t1 } };
-        //            DrawPolygon(polygon, new Pen(this.BackColor));
-        //            var matrix2 = new double[polygon.corners.Count, 3];
-        //            for (int i = 0; i < polygon.corners.Count; ++i)
-        //            {
-        //                matrix2[i, 0] = polygon.corners[i].X;
-        //                matrix2[i, 1] = polygon.corners[i].Y;
-        //                matrix2[i, 2] = 1;
-        //            }
-        //            var res2 = MultMatrix(matrix2, matrix);
-        //            bool correctValue = true;
-        //            var p = new Polygon();
-        //            for (int i = 0; i < polygon.corners.Count(); ++i)
-        //            {
-        //                if (!CheckCorrectPoint(res2[i, 0] / t1, res2[i, 1] / t1))
-        //                {
-        //                    correctValue = false;
-        //                    break;
-        //                }
-        //                p.corners.Add(new Point((int)(res2[i, 0] / t1), (int)(res2[i, 1] / t1)));
-        //            }
-        //            if (correctValue)
-        //            {
-        //                polygon = p;
-        //            }
-        //            DrawPolygon(polygon, redPen);
-        //            pictureBox1.Invalidate(); break;
-        //        default:
-        //            break;
-        //    }
-        //}
+        private void ScaleFigure()
+        {
+            var t1 = double.Parse(tasksPanels[0].Controls.Find("task2AngleTextBox", false).First().Text);
+            if (t1 == 0)
+                return;
+            var matrix = new double[,] {
+                    { 1, 0, 0, 0 },
+                    { 0, 1, 0, 0 },
+                    { 0, 0, 1, 0 },
+                    { 0, 0, 0, t1 } };
+            var matrix2 = new double[figure.CountVertex, 4];
+            for (int i = 0; i < figure.CountVertex; ++i)
+            {
+                matrix2[i, 0] = figure.vertexes[i].X;
+                matrix2[i, 1] = figure.vertexes[i].Y;
+                matrix2[i, 2] = figure.vertexes[i].Z;
+                matrix2[i, 3] = 1;
+            }
+            var res2 = MultMatrix(matrix2, matrix);
+            for (int i = 0; i < figure.CountVertex; ++i)
+            {
+                figure.vertexes[i].X = Math.Round(res2[i, 0] / t1, 3);
+                figure.vertexes[i].Y = Math.Round(res2[i, 1] / t1, 3);
+                figure.vertexes[i].Z = Math.Round(res2[i, 2] / t1, 3);
+            }
+            pictureBox1.Image = new Bitmap(pictureBox1.Width, pictureBox1.Height);
+            DrawPolyhedron(figure, pictureBox1.Size);
+            pictureBox1.Invalidate();
+        }
 
-    //    private void TurnFigure()
-    //    {
-    //        var t1 = double.Parse(tasksPanels[0].Controls.Find("task2AngleTextBox", false).First().Text);
-    //        var matrix = new double[,] { { Math.Cos(Math.PI * t1 / 180), Math.Sin(Math.PI * t1 / 180), 0 }, { -Math.Sin(Math.PI * t1 / 180), Math.Cos(Math.PI * t1 / 180), 0 }, { 0, 0, 1 } };
-    //        switch (figType)
-    //        {
-    //            case FigType.Point:
-    //                break;
-    //            case FigType.Segment:
-    //                DrawSegment(segment, new Pen(this.BackColor));
-    //                var res1 = MultMatrix(new double[,] { { segment.start.X, segment.start.Y, 1 }, { segment.end.X, segment.end.Y, 1 } }, matrix);
-    //                if (CheckCorrectPoint(res1[0, 0], res1[0, 1]) && CheckCorrectPoint(res1[1, 0], res1[1, 1]))
-    //                {
-    //                    segment.start = new Point((int)res1[0, 0], (int)res1[0, 1]);
-    //                    segment.end = new Point((int)res1[1, 0], (int)res1[1, 1]);
-    //                }
-    //                DrawSegment(segment, redPen);
-    //                pictureBox1.Invalidate();
-    //                break;
-    //            case FigType.Polygon:
-    //                DrawPolygon(polygon, new Pen(this.BackColor));
-    //                double[,] matrix2 = new double[polygon.corners.Count, 3];
-    //                for (int i = 0; i < polygon.corners.Count; ++i)
-    //                {
-    //                    matrix2[i, 0] = polygon.corners[i].X;
-    //                    matrix2[i, 1] = polygon.corners[i].Y;
-    //                    matrix2[i, 2] = 1;
-    //                }
-    //                var res2 = MultMatrix(matrix2, matrix);
-    //                bool correctValue = true;
-    //                var p = new Polygon();
-    //                for (int i = 0; i < polygon.corners.Count(); ++i)
-    //                {
-    //                    if (!CheckCorrectPoint(res2[i, 0], res2[i, 1]))
-    //                    {
-    //                        correctValue = false;
-    //                        break;
-    //                    }
-    //                    p.corners.Add(new Point((int)res2[i, 0], (int)res2[i, 1]));
-    //                }
-    //                if (correctValue)
-    //                {
-    //                    polygon = p;
-    //                }
-    //                DrawPolygon(polygon, redPen);
-    //                pictureBox1.Invalidate(); break;
-    //            default:
-    //                break;
-    //        }
-    //    }
+        private void TurnFigure()
+        {
+            var t1 = double.Parse(tasksPanels[0].Controls.Find("task2AngleTextBox", false).First().Text);
+            var matrix = new double[,] { { Math.Cos(Math.PI * t1 / 180), Math.Sin(Math.PI * t1 / 180), 0, 0 },
+                                     { -Math.Sin(Math.PI * t1 / 180), Math.Cos(Math.PI * t1 / 180), 0, 0 },
+                                     { 0, 0, 1, 0 },
+                                        {0,0,0,1 } };
+            double[,] matrix2 = new double[figure.CountVertex, 4];
+            for (int i = 0; i < figure.CountVertex; ++i)
+            {
+                matrix2[i, 0] = figure.vertexes[i].X;
+                matrix2[i, 1] = figure.vertexes[i].Y;
+                matrix2[i, 2] = figure.vertexes[i].Z;
+                matrix2[i, 3] = 1;
+            }
+            var res2 = MultMatrix(matrix2, matrix);
+            for (int i = 0; i < figure.CountVertex; ++i)
+            {
+                figure.vertexes[i].X = Math.Round(res2[i, 0], 3);
+                figure.vertexes[i].Y = Math.Round(res2[i, 1], 3);
+                figure.vertexes[i].Z = Math.Round(res2[i, 2], 3);
+            }
+            pictureBox1.Image = new Bitmap(pictureBox1.Width, pictureBox1.Height);
+            DrawPolyhedron(figure, pictureBox1.Size);
+            pictureBox1.Invalidate();
+        }
 
-    //    void MoveFigure()
-    //    {
-    //        var t1 = tasksPanels[0].Controls.Find("task2XTextBox", false).First().Text;
-    //        var t2 = tasksPanels[0].Controls.Find("task2YTextBox", false).First().Text;
-    //        var matrix = new int[,] { { 1, 0, 0 }, { 0, 1, 0 }, { int.Parse(t1), int.Parse(t2), 1 } };
-    //        switch (figType)
-    //        {
-    //            case FigType.Point:
-    //                ((Bitmap)pictureBox1.Image).SetPixel(point.X, point.Y, this.BackColor);
-    //                var res = MultMatrix(new int[,] { { point.X, point.Y, 1 } }, matrix);
-    //                if (CheckCorrectPoint(res[0, 0], res[0, 1]))
-    //                    point = new Point(res[0, 0], res[0, 1]);
-    //                ((Bitmap)pictureBox1.Image).SetPixel(point.X, point.Y, redPen.Color);
-    //                pictureBox1.Invalidate();
-    //                break;
-    //            case FigType.Segment:
-    //                DrawSegment(segment, new Pen(this.BackColor));
-    //                var res1 = MultMatrix(new int[,] { { segment.start.X, segment.start.Y, 1 }, { segment.end.X, segment.end.Y, 1 } }, matrix);
-    //                if (CheckCorrectPoint(res1[0, 0], res1[0, 1]) && CheckCorrectPoint(res1[1, 0], res1[1, 1]))
-    //                {
-    //                    segment.start = new Point(res1[0, 0], res1[0, 1]);
-    //                    segment.end = new Point(res1[1, 0], res1[1, 1]);
-    //                }
-    //                DrawSegment(segment, redPen);
-    //                pictureBox1.Invalidate();
-    //                break;
-    //            case FigType.Polygon:
-    //                DrawPolygon(polygon, new Pen(this.BackColor));
-    //                int[,] matrix2 = new int[polygon.corners.Count, 3];
-    //                for (int i = 0; i < polygon.corners.Count; ++i)
-    //                {
-    //                    matrix2[i, 0] = polygon.corners[i].X;
-    //                    matrix2[i, 1] = polygon.corners[i].Y;
-    //                    matrix2[i, 2] = 1;
-    //                }
-    //                var res2 = MultMatrix(matrix2, matrix);
-    //                bool correctValue = true;
-    //                var p = new Polygon();
-    //                for (int i = 0; i < polygon.corners.Count(); ++i)
-    //                {
-    //                    if (!CheckCorrectPoint(res2[i, 0], res2[i, 1]))
-    //                    {
-    //                        correctValue = false;
-    //                        break;
-    //                    }
-    //                    p.corners.Add(new Point(res2[i, 0], res2[i, 1]));
-    //                }
-    //                if (correctValue)
-    //                {
-    //                    polygon = p;
-    //                }
-    //                DrawPolygon(polygon, redPen);
-    //                pictureBox1.Invalidate();
-    //                break;
-    //            default:
-    //                break;
-    //        }
-    //    }
-
-    //private void task2ButtonOk_Click(object sender, EventArgs e)
-    //    {
-    //        if (mode == "move")
-    //            MoveFigure();
-    //        else if (mode == "turn")
-    //            TurnFigure();
-    //        else if (mode == "scale")
-    //            ScaleFigure();
-    //    }
+        void MoveFigure()
+        {
+            var t1 = tasksPanels[0].Controls.Find("task2XTextBox", false).First().Text;
+            var t2 = tasksPanels[0].Controls.Find("task2YTextBox", false).First().Text;
+            var t3 = tasksPanels[0].Controls.Find("task2ZTextBox", false).First().Text;
+            var matrix = new double[,] { { 1, 0, 0, 0 }, { 0, 1, 0, 0 }, { 0, 0, 1, 0 }, { int.Parse(t1), int.Parse(t2), int.Parse(t3), 1 } };
+            double[,] matrix2 = new double[figure.CountVertex, 4];
+            for (int i = 0; i < figure.CountVertex; ++i)
+            {
+                matrix2[i, 0] = figure.vertexes[i].X;
+                matrix2[i, 1] = figure.vertexes[i].Y;
+                matrix2[i, 2] = figure.vertexes[i].Z;
+                matrix2[i, 3] = 1;
+            }
+            var res2 = MultMatrix(matrix2, matrix);
+            for (int i = 0; i < figure.CountVertex; ++i)
+            {
+                figure.vertexes[i].X = Math.Round(res2[i, 0], 3);
+                figure.vertexes[i].Y = Math.Round(res2[i, 1], 3);
+                figure.vertexes[i].Z = Math.Round(res2[i, 2], 3);
+            }
+            pictureBox1.Image = new Bitmap(pictureBox1.Width, pictureBox1.Height);
+            DrawPolyhedron(figure, pictureBox1.Size);
+            pictureBox1.Invalidate();
+        }
 
         #endregion
     }
